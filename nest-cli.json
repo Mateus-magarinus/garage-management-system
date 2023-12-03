@@ -34,6 +34,33 @@
       "compilerOptions": {
         "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
+    },
+    "reservations": {
+      "type": "application",
+      "root": "apps/reservations",
+      "entryFile": "main",
+      "sourceRoot": "apps/reservations/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/reservations/tsconfig.app.json"
+      }
+    },
+    "garage-controll": {
+      "type": "application",
+      "root": "apps/garage-controll",
+      "entryFile": "main",
+      "sourceRoot": "apps/garage-controll/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/garage-controll/tsconfig.app.json"
+      }
+    },
+    "notifications": {
+      "type": "application",
+      "root": "apps/notifications",
+      "entryFile": "main",
+      "sourceRoot": "apps/notifications/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/notifications/tsconfig.app.json"
+      }
     }
   },
   "monorepo": true,
