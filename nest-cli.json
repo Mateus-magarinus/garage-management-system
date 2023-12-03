@@ -1,10 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/garage-management-system/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true
+    "webpack": true,
+    "tsConfigPath": "apps/garage-management-system/tsconfig.app.json"
   },
   "projects": {
     "common": {
@@ -15,6 +16,26 @@
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
+    },
+    "garage-management-system": {
+      "type": "application",
+      "root": "apps/garage-management-system",
+      "entryFile": "main",
+      "sourceRoot": "apps/garage-management-system/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/garage-management-system/tsconfig.app.json"
+      }
+    },
+    "auth": {
+      "type": "application",
+      "root": "apps/auth",
+      "entryFile": "main",
+      "sourceRoot": "apps/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
+      }
     }
-  }
+  },
+  "monorepo": true,
+  "root": "apps/garage-management-system"
 }
