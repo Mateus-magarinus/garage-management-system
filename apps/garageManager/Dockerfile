@@ -8,10 +8,10 @@ COPY nest-cli.json nest-cli.json
 
 RUN npm install
 
-COPY apps/garage-controll apps/garage-controll
+COPY apps/garageManager apps/garageManager
 COPY libs libs
 
-RUN npm run build garage-controll
+RUN npm run build garageManager
 
 FROM node:alpine as production
 
@@ -26,4 +26,4 @@ RUN npm install --prod
 
 COPY --from=development /usr/src/app/dist ./dist
 
-CMD ["node", "dist/apps/garage-controll/main"]
+CMD ["node", "dist/apps/garageManager/main"]

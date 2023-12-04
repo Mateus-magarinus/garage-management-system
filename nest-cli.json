@@ -44,13 +44,13 @@
         "tsConfigPath": "apps/reservations/tsconfig.app.json"
       }
     },
-    "garage-controll": {
+    "garageManager": {
       "type": "application",
-      "root": "apps/garage-controll",
+      "root": "apps/garageManager",
       "entryFile": "main",
-      "sourceRoot": "apps/garage-controll/src",
+      "sourceRoot": "apps/garageManager/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/garage-controll/tsconfig.app.json"
+        "tsConfigPath": "apps/garageManager/tsconfig.app.json"
       }
     },
     "notifications": {

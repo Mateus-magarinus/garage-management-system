@@ -23,14 +23,14 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
-  garage-controll:
+  garageManager:
     build:
       context: .
-      dockerfile: ./apps/garage-controll/Dockerfile
+      dockerfile: ./apps/garageManager/Dockerfile
       target: development
-    command: npm run start:dev garage-controll
+    command: npm run start:dev garageManager
     env_file:
-      - ./apps/garage-controll/.env
+      - ./apps/garageManager/.env
     volumes:
       - .:/usr/src/app
   notifications:
@@ -45,3 +45,5 @@ services:
       - .:/usr/src/app
   mongo:
     image: mongo
+    ports:
+      - '27019:27017'

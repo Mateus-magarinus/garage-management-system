@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class GarageControllService {
+export class GarageManagerService {
   getHello(): string {
     return 'Hello World!';
   }
