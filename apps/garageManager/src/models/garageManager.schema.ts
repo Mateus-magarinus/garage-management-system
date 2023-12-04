@@ -24,8 +24,11 @@ export class GarageManagerDocument extends AbstractDocument {
 
   @Prop()
   isCovered: boolean;
+
+  @Prop()
+  userId: string;
 }
 
-export const ReservationSchema = SchemaFactory.createForClass(
+export const GarageManagerSchema = SchemaFactory.createForClass(
   GarageManagerDocument,
 );
