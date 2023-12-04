@@ -23,14 +23,14 @@ services:
       - '3001:3001'
     volumes:
       - .:/usr/src/app
-  garageManager:
+  garagemanager:
     build:
       context: .
-      dockerfile: ./apps/garageManager/Dockerfile
+      dockerfile: ./apps/garagemanager/Dockerfile
       target: development
-    command: npm run start:dev garageManager
+    command: npm run start:dev garagemanager
     env_file:
-      - ./apps/garageManager/.env
+      - ./apps/garagemanager/.env
     volumes:
       - .:/usr/src/app
   notifications:
