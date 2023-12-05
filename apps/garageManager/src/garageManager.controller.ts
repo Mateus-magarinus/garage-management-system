@@ -30,14 +30,12 @@ export class GarageManagerController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  @Roles('Admin')
   async findAll() {
     return this.garageManagerService.findAll();
   }
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  @Roles('Admin')
   async findOne(@Param('id') id: string) {
     return this.garageManagerService.findOne(id);
   }
