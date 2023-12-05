@@ -5,7 +5,7 @@ import { GarageManagerRepository } from './garageManager.repository';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AUTH_SERVICE, DatabaseModule, LoggerModule } from '@app/common';
-import Joi from 'joi';
+import * as Joi from 'joi';
 import {
   GarageManagerDocument,
   GarageManagerSchema,
@@ -24,9 +24,7 @@ import {
         MONGODB_URI: Joi.string().required(),
         PORT: Joi.number().required(),
         AUTH_HOST: Joi.string().required(),
-        PAYMENTS_HOST: Joi.string().required(),
         AUTH_PORT: Joi.number().required(),
-        PAYMENTS_PORT: Joi.number().required(),
       }),
     }),
     ClientsModule.registerAsync([

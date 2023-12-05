@@ -31,6 +31,8 @@ services:
     command: npm run start:dev garagemanager
     env_file:
       - ./apps/garagemanager/.env
+    ports:
+      - '3005:3005'
     volumes:
       - .:/usr/src/app
   notifications:
