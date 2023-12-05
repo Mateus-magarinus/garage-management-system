@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { LoggerModule } from '@app/common';
 import { JwtModule } from '@nestjs/jwt';
+import { LoggerModule } from '@app/common';
 import * as Joi from 'joi';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
