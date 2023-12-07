@@ -1,1 +1,2 @@
 export const AUTH_SERVICE = 'auth';
+export const GARAGE_MANAGEMENT_SERVICE = 'garagemanager';

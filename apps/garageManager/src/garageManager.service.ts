@@ -25,6 +25,10 @@ export class GarageManagerService {
     return this.garageManagerRepository.findOne({ _id });
   }
 
+  async findByParkingSpace(parkingSpace: number) {
+    return this.garageManagerRepository.findOne({ parkingSpace });
+  }
+
   async update(_id: string, updateGarageDto: UpdateGarageDto) {
     return this.garageManagerRepository.findOneAndUpdate(
       { _id },

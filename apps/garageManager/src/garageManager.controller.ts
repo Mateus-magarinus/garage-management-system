@@ -13,6 +13,7 @@ import { JwtAuthGuard, CurrentUser, UserDto } from '@app/common';
 import { Roles } from '@app/common/decorators/roles.decorator';
 import { CreateGarageDto } from './dto/create-garage.dto';
 import { UpdateGarageDto } from './dto/update-garage.dto';
+import { MessagePattern } from '@nestjs/microservices';
 
 @Controller('garage-manager')
 export class GarageManagerController {
@@ -28,16 +29,25 @@ export class GarageManagerController {
     return this.garageManagerService.create(createGarageDto, user);
   }
 
+  @MessagePattern('find_all')
   @Get()
   @UseGuards(JwtAuthGuard)
   async findAll() {
     return this.garageManagerService.findAll();
   }
 
+  @MessagePattern('find_one')
   @Get(':id')
   @UseGuards(JwtAuthGuard)
   async findOne(@Param('id') id: string) {
     return this.garageManagerService.findOne(id);
+  }
+
+  @MessagePattern('find_by_parking_space')
+  @Get('findByParkingSpace/:parkingSpace')
+  @UseGuards(JwtAuthGuard)
+  async findByParkingSpace(@Param('parkingSpace') parkingSpace: number) {
+    return this.garageManagerService.findByParkingSpace(parkingSpace);
   }
 
   @Patch(':id')
