@@ -25,30 +25,17 @@ export class ReservationsController {
     @Body() createReservationDto: CreateReservationDto,
     @CurrentUser() user: UserDto,
   ) {
-    try {
-      const result = await this.reservationsService.create(
-        createReservationDto,
-        user,
-      );
-      return { success: true, data: result };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+    return await this.reservationsService.create(createReservationDto, user);
   }
 
   @Get('availableCarSpaces')
   @UseGuards(JwtAuthGuard)
   async findAvailableCarSpaces(@Req() req) {
     const dateRangeDto: DateRangeDto = req.headers;
-    try {
-      const result = await this.reservationsService.findAvailableCarSpaces(
-        dateRangeDto.startDate,
-        dateRangeDto.endDate,
-      );
-      return { success: true, data: result };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+    return await this.reservationsService.findAvailableCarSpaces(
+      dateRangeDto.startDate,
+      dateRangeDto.endDate,
+    );
   }
 
   @Get('userReservations')
@@ -73,6 +60,21 @@ export class ReservationsController {
     }
   }
 
+  @Get('userHistoryReservations/:id')
+  @UseGuards(JwtAuthGuard)
+  async findOneFromHistory(
+    @Param('id') id: string,
+    @CurrentUser() user: UserDto,
+  ) {
+    return await this.reservationsService.findOneFromHistory(id, user);
+  }
+
+  @Get('userHistoryReservations')
+  @UseGuards(JwtAuthGuard)
+  async findAllFromHistory(@CurrentUser() user: UserDto) {
+    return await this.reservationsService.findAllFromHistory(user);
+  }
+
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   async update(
@@ -80,24 +82,16 @@ export class ReservationsController {
     @Body() updateReservationDto: UpdateReservationDto,
     @CurrentUser() user: UserDto,
   ) {
-    try {
-      return await this.reservationsService.update(
-        id,
-        updateReservationDto,
-        user,
-      );
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+    return await this.reservationsService.update(
+      id,
+      updateReservationDto,
+      user,
+    );
   }
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string, @CurrentUser() user: UserDto) {
-    try {
-      return await this.reservationsService.remove(id, user);
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+    return await this.reservationsService.remove(id, user);
   }
 }

@@ -45,7 +45,7 @@ export class ReservationsService {
       );
     }
 
-    this.reservationsHistoryRepository.create({
+    await this.reservationsHistoryRepository.create({
       ...createReservationDto,
       userId,
     });

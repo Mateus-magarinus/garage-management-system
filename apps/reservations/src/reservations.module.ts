@@ -15,12 +15,21 @@ import {
   ReservationDocument,
   ReservationSchema,
 } from './models/reservation.schema';
+import { ReservationsHistoryRepository } from './reservations-history.repository';
+import {
+  ReservationHistoryDocument,
+  ReservationHistorySchema,
+} from './models/reservation-history.schema';
 
 @Module({
   imports: [
     DatabaseModule,
     DatabaseModule.forFeature([
       { name: ReservationDocument.name, schema: ReservationSchema },
+      {
+        name: ReservationHistoryDocument.name,
+        schema: ReservationHistorySchema,
+      },
     ]),
     LoggerModule,
     ConfigModule.forRoot({
@@ -30,7 +39,7 @@ import {
         PORT: Joi.number().required(),
         AUTH_HOST: Joi.string().required(),
         AUTH_PORT: Joi.number().required(),
-        GARAGE_HOST: Joi.number().required(),
+        GARAGE_HOST: Joi.string().required(),
         GARAGE_PORT: Joi.number().required(),
       }),
     }),
@@ -60,6 +69,10 @@ import {
     ]),
   ],
   controllers: [ReservationsController],
-  providers: [ReservationsService, ReservationsRepository],
+  providers: [
+    ReservationsService,
+    ReservationsRepository,
+    ReservationsHistoryRepository,
+  ],
 })
 export class ReservationsModule {}
