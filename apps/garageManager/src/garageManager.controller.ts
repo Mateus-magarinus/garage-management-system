@@ -21,7 +21,7 @@ export class GarageManagerController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @Roles('Admin')
+  @Roles('admin')
   async create(
     @Body() createGarageDto: CreateGarageDto,
     @CurrentUser() user: UserDto,
@@ -52,7 +52,7 @@ export class GarageManagerController {
 
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
-  @Roles('Admin')
+  @Roles('admin')
   async update(
     @Param('id') id: string,
     @Body() updateGarageDto: UpdateGarageDto,
@@ -62,7 +62,7 @@ export class GarageManagerController {
 
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
-  @Roles('Admin')
+  @Roles('admin')
   async remove(@Param('id') id: string) {
     return this.garageManagerService.remove(id);
   }

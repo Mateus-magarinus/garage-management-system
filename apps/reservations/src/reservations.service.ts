@@ -6,7 +6,11 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
-import { GARAGE_MANAGEMENT_SERVICE, UserDto } from '@app/common';
+import {
+  GARAGE_MANAGEMENT_SERVICE,
+  NOTIFICATIONS_SERVICE,
+  UserDto,
+} from '@app/common';
 import { CreateReservationDto } from './dto/create-reservation.dto';
 import { UpdateReservationDto } from './dto/update-reservation.dto';
 import { ReservationsRepository } from './reservations.repository';
@@ -21,11 +25,13 @@ export class ReservationsService {
     private readonly reservationsHistoryRepository: ReservationsHistoryRepository,
     @Inject(GARAGE_MANAGEMENT_SERVICE)
     private readonly garageManagerService: ClientProxy,
+    @Inject(NOTIFICATIONS_SERVICE)
+    private readonly notificationsService: ClientProxy,
   ) {}
 
   async create(
     createReservationDto: CreateReservationDto,
-    { _id: userId }: UserDto,
+    { _id: userId, email }: UserDto,
   ) {
     const parkingSpace = await this.garageManagerService.send(
       'find_by_parking_space',
@@ -50,10 +56,28 @@ export class ReservationsService {
       userId,
     });
 
-    return this.reservationsRepository.create({
+    const reservation = await this.reservationsRepository.create({
       ...createReservationDto,
       userId,
     });
+
+    this.notificationsService.emit('notify_email', {
+      email,
+      text: `Dear User,
+
+      This is a notification to inform you that Parking Space ${createReservationDto.parkingSpace} has been successfully reserved.
+      
+      Reservation Details:
+      - Parking Space: ${createReservationDto.parkingSpace}
+      - Start Date: ${createReservationDto.startDate}
+      - End Date: ${createReservationDto.endDate}
+      
+      Thank you for using our parking reservation system.
+      
+      Best regards`,
+    });
+
+    return reservation;
   }
 
   async findAvailableCarSpaces(startDate: string, endDate: string) {
@@ -180,7 +204,7 @@ export class ReservationsService {
   async update(
     _id: string,
     updateReservationDto: UpdateReservationDto,
-    { _id: userId, roles }: UserDto,
+    { _id: userId, roles, email }: UserDto,
   ) {
     const reservationId = _id;
 
@@ -207,6 +231,22 @@ export class ReservationsService {
     if (!updatedReservation) {
       throw new NotFoundException('Reservation not found');
     }
+
+    this.notificationsService.emit('notify_email', {
+      email,
+      text: `Dear User,
+
+      This is a notification to inform you that the reservation for Parking Space ${updateReservationDto.parkingSpace} has been successfully updated.
+      
+      Updated Reservation Details:
+      - Parking Space: ${updateReservationDto.parkingSpace}
+      - New Start Date: ${updateReservationDto.startDate}
+      - New End Date: ${updateReservationDto.endDate}
+      
+      Thank you for using our parking reservation system.
+      
+      Best regards`,
+    });
 
     return updatedReservation;
   }
@@ -237,7 +277,7 @@ export class ReservationsService {
     return deletedReservation;
   }
 
-  @Cron(CronExpression.EVERY_HOUR)
+  @Cron(CronExpression.EVERY_MINUTE)
   private async removeOldReservations() {
     try {
       const currentDateTime = new Date();

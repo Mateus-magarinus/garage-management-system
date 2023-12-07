@@ -9,6 +9,7 @@ import {
   DatabaseModule,
   GARAGE_MANAGEMENT_SERVICE,
   LoggerModule,
+  NOTIFICATIONS_SERVICE,
 } from '@app/common';
 import * as Joi from 'joi';
 import {
@@ -62,6 +63,17 @@ import {
           options: {
             host: configService.get('GARAGE_HOST'),
             port: configService.get('GARAGE_PORT'),
+          },
+        }),
+        inject: [ConfigService],
+      },
+      {
+        name: NOTIFICATIONS_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('NOTIFICATIONS_HOST'),
+            port: configService.get('NOTIFICATIONS_PORT'),
           },
         }),
         inject: [ConfigService],
