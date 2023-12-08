@@ -22,7 +22,7 @@ export class NotificationsService {
     await this.transporter.sendMail({
       from: this.configService.get('SMTP_USER'),
       to: email,
-      subject: 'Sleepr Notification',
+      subject: 'Garage Notification Reservation',
       text,
     });
   }

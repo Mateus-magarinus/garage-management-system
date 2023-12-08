@@ -80,35 +80,6 @@ export class ReservationsService {
     return reservation;
   }
 
-  async findAvailableCarSpaces(startDate: string, endDate: string) {
-    try {
-      const overlappingReservations = await this.reservationsRepository.find({
-        startDate: { $lt: new Date(endDate) },
-        endDate: { $gt: new Date(startDate) },
-      });
-
-      const allCarSpaces: any = await this.garageManagerService.send(
-        'find_all',
-        {},
-      );
-
-      const reservedParkingSpaces = overlappingReservations.map(
-        (reservation) => reservation.parkingSpace,
-      );
-
-      const availableCarSpaces = allCarSpaces.filter(
-        (carSpace) => !reservedParkingSpaces.includes(carSpace),
-      );
-
-      return availableCarSpaces;
-    } catch (error) {
-      console.error('Error finding available car spaces:', error);
-      throw new InternalServerErrorException(
-        'Error finding available car spaces',
-      );
-    }
-  }
-
   async findAll({ _id: userId }: UserDto) {
     try {
       const userReservations = await this.reservationsRepository.find({
@@ -157,6 +128,7 @@ export class ReservationsService {
 
   async findAllFromHistory({ _id: userId }: UserDto) {
     try {
+      console.log('adasdasdasd', userId);
       const userReservations = await this.reservationsHistoryRepository.find({
         userId,
       });
@@ -207,20 +179,17 @@ export class ReservationsService {
     { _id: userId, roles, email }: UserDto,
   ) {
     const reservationId = _id;
-
+    console.log(_id);
     if (!roles.includes('admin')) {
       this.validateUserPermission(userId, reservationId);
     }
 
-    const updatedHistoryReservation =
-      await this.reservationsHistoryRepository.findOneAndUpdate(
-        { _id: reservationId },
-        { $set: updateReservationDto },
-      );
-
-    if (!updatedHistoryReservation) {
-      throw new NotFoundException('Reservation not found in history');
-    }
+    await this.reservationsHistoryRepository.create({
+      endDate: updateReservationDto.endDate,
+      startDate: updateReservationDto.startDate,
+      parkingSpace: updateReservationDto.parkingSpace,
+      userId,
+    });
 
     const updatedReservation =
       await this.reservationsRepository.findOneAndUpdate(
@@ -256,15 +225,6 @@ export class ReservationsService {
     if (!roles.includes('admin')) {
       this.validateUserPermission(userId, reservationId);
     }
-    const deletedHistoryReservation =
-      await this.reservationsHistoryRepository.findOneAndDelete({
-        _id: reservationId,
-      });
-
-    if (!deletedHistoryReservation) {
-      throw new NotFoundException('Reservation not found in history');
-    }
-
     const deletedReservation =
       await this.reservationsRepository.findOneAndDelete({
         _id: reservationId,
@@ -278,7 +238,7 @@ export class ReservationsService {
   }
 
   @Cron(CronExpression.EVERY_MINUTE)
-  private async removeOldReservations() {
+  async removeOldReservations() {
     try {
       const currentDateTime = new Date();
 

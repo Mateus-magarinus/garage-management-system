@@ -14,11 +14,14 @@ import { Roles } from '@app/common/decorators/roles.decorator';
 import { CreateGarageDto } from './dto/create-garage.dto';
 import { UpdateGarageDto } from './dto/update-garage.dto';
 import { MessagePattern } from '@nestjs/microservices';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('GarageManager')
 @Controller('garage-manager')
 export class GarageManagerController {
   constructor(private readonly garageManagerService: GarageManagerService) {}
 
+  @ApiCookieAuth()
   @Post()
   @UseGuards(JwtAuthGuard)
   @Roles('admin')
@@ -29,6 +32,7 @@ export class GarageManagerController {
     return this.garageManagerService.create(createGarageDto, user);
   }
 
+  @ApiCookieAuth()
   @MessagePattern('find_all')
   @Get()
   @UseGuards(JwtAuthGuard)
@@ -43,6 +47,7 @@ export class GarageManagerController {
     return this.garageManagerService.findOne(id);
   }
 
+  @ApiCookieAuth()
   @MessagePattern('find_by_parking_space')
   @Get('findByParkingSpace/:parkingSpace')
   @UseGuards(JwtAuthGuard)
@@ -50,6 +55,7 @@ export class GarageManagerController {
     return this.garageManagerService.findByParkingSpace(parkingSpace);
   }
 
+  @ApiCookieAuth()
   @Patch(':id')
   @UseGuards(JwtAuthGuard)
   @Roles('admin')
@@ -60,6 +66,7 @@ export class GarageManagerController {
     return this.garageManagerService.update(id, updateGarageDto);
   }
 
+  @ApiCookieAuth()
   @Delete(':id')
   @UseGuards(JwtAuthGuard)
   @Roles('admin')

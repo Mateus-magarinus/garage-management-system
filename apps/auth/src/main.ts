@@ -5,6 +5,7 @@ import { Transport } from '@nestjs/microservices';
 import * as cookieParser from 'cookie-parser';
 import { Logger } from 'nestjs-pino';
 import { AuthModule } from './auth.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
@@ -20,6 +21,15 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
   app.setGlobalPrefix('api');
+  const config = new DocumentBuilder()
+    .setTitle('Auth API')
+    .setDescription('API that allows to Authenticate')
+    .setVersion('1.0')
+    .addTag('Auth')
+    .addTag('User')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
   await app.startAllMicroservices();
   await app.listen(configService.get('HTTP_PORT'));
 }
